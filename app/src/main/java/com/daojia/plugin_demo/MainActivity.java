@@ -28,25 +28,36 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                Intent intent = new Intent(Intent.ACTION_VIEW);
+                Intent intent1 = new Intent();
+                intent1.setClass(MainActivity.this, TargetActivity.class);
+
+                //必须加上 FLAG NEW_TASK
+                /**
+                 *  if ((intent.getFlags()&Intent.FLAG_ACTIVITY_NEW_TASK) == 0
+                 && options != null && ActivityOptions.fromBundle(options).getLaunchTaskId() == -1) {
+                 throw new AndroidRuntimeException(
+                 "Calling startActivity() from outside of an Activity "
+                 + " context requires the FLAG_ACTIVITY_NEW_TASK flag."
+                 + " Is this really what you want?");
+                 }
+                 */
+                intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//        intent.setData(Uri.parse("http://www.baidu.com"));
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getApplicationContext().startActivity(intent1);
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
 
-//        Intent intent = new Intent(Intent.ACTION_VIEW);
-        Intent intent1 = new Intent();
-        intent1.setClass(this, TargetActivity.class);
-        intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.setData(Uri.parse("http://www.baidu.com"));
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getApplicationContext().startActivity(intent1);
+//
 
     }
 
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);
-
         try {
             HookHelper.attachContext();
             AMSHookHelper.hookActivityThreadHandler();

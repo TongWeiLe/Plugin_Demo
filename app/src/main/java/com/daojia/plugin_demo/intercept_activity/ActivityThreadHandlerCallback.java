@@ -31,9 +31,10 @@ public class ActivityThreadHandlerCallback implements Handler.Callback {
 
         }
 
-        handler.handleMessage(msg);
-
-        return true;
+//        handler.handleMessage(msg);
+//      return false，表示只会拦截修改下Intent为TargetActivity,如果return true
+//      则需要加上 handler.handleMessage(msg) 让handler处理其它消息
+        return false;
     }
 
     private void handleLaunchActivity(Message msg) {
@@ -46,19 +47,18 @@ public class ActivityThreadHandlerCallback implements Handler.Callback {
 //        handleLaunchActivity(r, null, "LAUNCH_ACTIVITY");
 //        Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
 
-
         Object object = msg.obj;
 
         try {
-            Field intent =  object.getClass().getDeclaredField("intent");
-            intent.setAccessible(true);
-            Intent intent2 = (Intent) intent.get(object);
+            Field fieldIntent =  object.getClass().getDeclaredField("intent");
+            fieldIntent.setAccessible(true);
+            Intent intent = (Intent) fieldIntent.get(object);
 
-            Intent target = intent2.getParcelableExtra(AMSHookHelper.EXTRA_TARGET_INTENT);
+            Intent target = intent.getParcelableExtra(AMSHookHelper.EXTRA_TARGET_INTENT);
 
-            Log.e(TAG,intent2 + "       " +  target.toString());
+            Log.e(TAG,intent + "       " +  target.toString());
 
-            intent2.setComponent(target.getComponent());
+            intent.setComponent(target.getComponent());
 
 
 

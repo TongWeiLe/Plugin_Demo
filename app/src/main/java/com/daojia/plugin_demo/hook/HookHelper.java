@@ -6,8 +6,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 /**
- * @author weishu
- * @date 16/1/28
  */
 public class HookHelper {
 

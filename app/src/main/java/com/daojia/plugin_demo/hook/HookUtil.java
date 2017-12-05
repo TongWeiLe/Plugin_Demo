@@ -34,7 +34,6 @@ public class HookUtil {
             field1.setAccessible(true);
 
             //拿到ActivityManagerProxy对象 代理ActivityManagerNative对象的子类ActivityManagerService
-            //为什么不是IActivityManager对象
             //因为在gDefault对象的 实现方法 onCreate()方法中 asInterface(b)返回的是  return new ActivityManagerProxy(obj)  ActivityManagerProxy实现了IActivityManager 具体可以看源码
 
             Object iActivityManager = field1.get(amn);
