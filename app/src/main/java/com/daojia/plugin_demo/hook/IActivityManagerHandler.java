@@ -12,7 +12,8 @@ import java.lang.reflect.Method;
 
 /**
  */
-/* package */ class IActivityManagerHandler implements InvocationHandler {
+/* package */
+class IActivityManagerHandler implements InvocationHandler {
 
     private static final String TAG = "IActivityManagerHandler";
 

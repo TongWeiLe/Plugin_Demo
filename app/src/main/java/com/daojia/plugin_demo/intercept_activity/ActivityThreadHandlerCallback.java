@@ -17,8 +17,7 @@ public class ActivityThreadHandlerCallback implements Handler.Callback {
 
     Handler handler;
 
-    public ActivityThreadHandlerCallback(Handler handler) {
-        this.handler = handler;
+    public ActivityThreadHandlerCallback(Handler handler) {this.handler = handler;
     }
 
     @Override
@@ -59,8 +58,6 @@ public class ActivityThreadHandlerCallback implements Handler.Callback {
             Log.e(TAG,intent + "       " +  target.toString());
 
             intent.setComponent(target.getComponent());
-
-
 
         } catch (Exception e) {
             e.printStackTrace();

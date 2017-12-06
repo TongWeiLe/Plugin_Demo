@@ -2,6 +2,7 @@ package com.daojia.plugin_demo;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,9 +14,10 @@ import android.view.View;
 
 import com.daojia.plugin_demo.activity.TargetActivity;
 import com.daojia.plugin_demo.hook.HookHelper;
-import com.daojia.plugin_demo.intercept_activity.AMSHookHelper;
 
 public class MainActivity extends AppCompatActivity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,14 +26,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(Intent.ACTION_VIEW);
-                Intent intent1 = new Intent();
-                intent1.setClass(MainActivity.this, TargetActivity.class);
 
+//
                 //必须加上 FLAG NEW_TASK
                 /**
                  *  if ((intent.getFlags()&Intent.FLAG_ACTIVITY_NEW_TASK) == 0
@@ -42,17 +44,30 @@ public class MainActivity extends AppCompatActivity {
                  + " Is this really what you want?");
                  }
                  */
-                intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//        intent.setData(Uri.parse("http://www.baidu.com"));
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                getApplicationContext().startActivity(intent1);
+
+//
+                getApplicationContext().startActivity(replaceTargetIntent());
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
-
 //
 
+    }
+
+
+    public Intent replaceIntentUrl(){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse("http://www.baidu.com"));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
+    }
+
+    public Intent replaceTargetIntent(){
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, TargetActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return intent;
     }
 
     @Override
@@ -60,7 +75,9 @@ public class MainActivity extends AppCompatActivity {
         super.attachBaseContext(newBase);
         try {
             HookHelper.attachContext();
-            AMSHookHelper.hookActivityThreadHandler();
+
+            // targetActivity 替换 stubActivity打开 记得在Evilinstrumentation做修改
+            com.daojia.plugin_demo.intercept_activity.AMSHookHelper.hookActivityThreadHandler();
         } catch (Exception e) {
             e.printStackTrace();
         }
